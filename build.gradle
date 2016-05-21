@@ -1,0 +1,88 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+// *********************************************************************
+apply plugin: 'maven'
+apply plugin: 'signing' //使用signing plugin做数字签名
+
+//定义GroupID和Version，ArtefactID会自动使用Project名
+group = 'com.hianzuo.logger'
+version = '1.0.0'
+
+repositories {
+    mavenCentral();
+}
+
+artifacts {
+    archives file('LibAndroidLogger.aar')
+}
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //为Pom文件做数字签名
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            //指定项目部署到的中央库地址，UserName和Password就是Part 1中注册的账号。
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            //构造项目的Pom文件，参见Part 2中Pom文件的规范，不要遗漏必填项
+            pom.project {
+                name project.name
+                packaging 'aar'
+                description 'Android日志工具'
+                url 'https://github.com/hianzuo/android-logger'
+
+                scm {
+                    url 'scm:git@github.com:hianzuo/android-logger.git'
+                    connection 'scm:git@github.com:hianzuo/android-logger.git'
+                    developerConnection 'git@github.com:hianzuo/android-logger.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'hianzuo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'ryanch741'
+                        name 'chenyuan'
+                        email '80950159@qq.com'
+                    }
+                }
+            }
+        }
+    }
+}
