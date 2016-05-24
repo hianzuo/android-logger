@@ -26,7 +26,7 @@ apply plugin: 'maven'
 apply plugin: 'signing' //使用signing plugin做数字签名
 
 //定义GroupID和Version，ArtefactID会自动使用Project名
-group = 'com.hianzuo.logger'
+group = 'com.hianzuo.android'
 version = '1.0.0'
 
 repositories {
@@ -58,7 +58,7 @@ uploadArchives {
             pom.project {
                 name project.name
                 packaging 'aar'
-                description 'Android日志工具'
+                description 'Android Application Log save into file in progress.'
                 url 'https://github.com/hianzuo/android-logger'
 
                 scm {
