@@ -26,7 +26,8 @@ public class ExampleApplication extends Application {
 
 **You're good to go!**
 
-Log.d(TAG,"message"). will be log to your file now.
+com.hianzuo.logger.Log.d(TAG,"message");
+Will be log to your file and log in monitor now.
 
 Questions? Check out [the FAQ](https://github.com/hianzuo/andorid-logger/wiki/FAQ)!
 
