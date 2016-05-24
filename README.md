@@ -24,11 +24,11 @@ public class ExampleApplication extends Application {
 }
 ```
 
-**You're good to go!** Log.d(TAG,"message"). will be log to your file now.
+**You're good to go!**
+
+Log.d(TAG,"message"). will be log to your file now.
 
 Questions? Check out [the FAQ](https://github.com/hianzuo/andorid-logger/wiki/FAQ)!
-
-![icon_512.png](assets/icon_512.png)
 
 ## License
 
