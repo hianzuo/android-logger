@@ -305,7 +305,7 @@ class AppLogger extends Thread {
     }
 
     private static boolean isBeforeDay(String fileName, int beforeDay) {
-        int dIndex = fileName.lastIndexOf("build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/res");
+        int dIndex = fileName.lastIndexOf(".");
         Integer createDay = Integer.valueOf(fileName.substring(dIndex - 10, dIndex).replace("-", ""));
         Calendar instance = Calendar.getInstance();
         instance.add(Calendar.DAY_OF_MONTH, -beforeDay);
