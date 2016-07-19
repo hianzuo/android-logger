@@ -305,12 +305,21 @@ class AppLogger extends Thread {
     }
 
     private static boolean isBeforeDay(String fileName, int beforeDay) {
-        int dIndex = fileName.lastIndexOf(".");
-        Integer createDay = Integer.valueOf(fileName.substring(dIndex - 10, dIndex).replace("-", ""));
-        Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DAY_OF_MONTH, -beforeDay);
-        Integer beforeDayInt = Integer.valueOf(sdf.format(instance.getTime()).replace("-", ""));
-        return createDay < beforeDayInt;
+        if (null != fileName && fileName.endsWith(".log")) {
+            int dIndex = fileName.lastIndexOf(".");
+            if (dIndex > 0 && fileName.length() > 12) {
+                try {
+                    Integer createDay = Integer.valueOf(fileName.substring(dIndex - 10, dIndex).replace("-", ""));
+                    Calendar instance = Calendar.getInstance();
+                    instance.add(Calendar.DAY_OF_MONTH, -beforeDay);
+                    Integer beforeDayInt = Integer.valueOf(sdf.format(instance.getTime()).replace("-", ""));
+                    return createDay < beforeDayInt;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     public static synchronized void flush(Context context) {
@@ -319,7 +328,6 @@ class AppLogger extends Thread {
         }
         appLogger.flushLog();
     }
-
 
 
     private static String callers() {
@@ -335,6 +343,7 @@ class AppLogger extends Thread {
         }
         return sb.toString().trim() + "\n";
     }
+
     interface DeleteLogCallback {
         void callback(String result);
     }
