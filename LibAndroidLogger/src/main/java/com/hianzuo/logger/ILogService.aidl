@@ -7,5 +7,6 @@ interface ILogService {
 	boolean append(in String line);
 	boolean flush();
 	boolean delete(in int beforeDay);
+	boolean splitTime(long time);
 	void deleteAll(in IDeleteLogCallback callback);
 }

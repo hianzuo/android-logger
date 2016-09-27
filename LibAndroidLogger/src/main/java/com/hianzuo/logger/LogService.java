@@ -44,6 +44,13 @@ public class LogService extends Service {
                 return true;
             }
 
+
+            @Override
+            public boolean splitTime(long time) throws RemoteException {
+                AppLogger.splitTime(time);
+                return true;
+            }
+
             @Override
             public void deleteAll(final IDeleteLogCallback callback) throws RemoteException {
                 AppLogger.deleteAll(LogService.this, new AppLogger.DeleteLogCallback() {

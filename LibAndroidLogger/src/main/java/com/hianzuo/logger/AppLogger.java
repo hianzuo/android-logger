@@ -24,11 +24,14 @@ import java.util.Locale;
 class AppLogger extends Thread {
     private static final int FLUSH_COUNT = 50;
     private static final int MAX_CACHE_COUNT = 3000;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
+    private static final SimpleDateFormat fileNameSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
+    private static final SimpleDateFormat headSdf = new SimpleDateFormat("HH:mm:ss.SSS|", Locale.CHINESE);
+
     private static String filePrefix = null;
     private static String filePath = null;
     private static final String TAG = "AppLogger";
     private static Context context;
+    private static long splitTime = 0L;
 
     private ALArrayList tempBuffer = new ALArrayList("temp");
     private ALArrayList buffer = new ALArrayList("main");
@@ -73,7 +76,7 @@ class AppLogger extends Thread {
     private synchronized void __append(String line) {
         int bufferSize;
         synchronized (mLock) {
-            buffer.add(line);
+            buffer.add(head() + " " + line);
             bufferSize = buffer.size();
         }
         if (bufferSize > FLUSH_COUNT) {
@@ -116,8 +119,6 @@ class AppLogger extends Thread {
                 } else {
                     ALArrayList buffer = getFlushBuffer();
                     try {
-//                        Log.e(TAG, "flush buffer :" + buffer.getName().hashCode());
-//                        Log.e(TAG, "add   buffer :" + this.buffer.getName().hashCode());
                         lockFailure = __flush_to_file_ret_lock_failure(buffer);
                     } finally {
                         exChangeBackOnFlushBuffer(buffer);
@@ -249,7 +250,7 @@ class AppLogger extends Thread {
         if (null == filePrefix) {
             filePrefix = null != context ? context.getPackageName().replace(".", "_") : "com_hianzuo_logger";
         }
-        String fileName = filePrefix + sdf.format(new Date()) + ".log";
+        String fileName = filePrefix + fileNameSdf.format(new Date()) + ".log";
         File fileDir;
         if (null == filePath) {
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -267,13 +268,17 @@ class AppLogger extends Thread {
             if (pf.exists() || pf.mkdirs()) {
                 return logFile;
             } else {
-                Log.e("AppLogger", "日志文件创建失败.");
+                Log.e("AppLogger", "日志文件创建失败(" + pf.getAbsolutePath() + ").");
                 return null;
             }
         } else {
-            Log.e("AppLogger", "日志文件夹创建失败.");
+            Log.e("AppLogger", "日志文件创建失败(" + fileDir.getAbsolutePath() + ").");
             return null;
         }
+    }
+
+    public static synchronized void splitTime(long time) {
+        splitTime = time;
     }
 
     public static synchronized void deleteAll(Context context, DeleteLogCallback callback) {
@@ -312,7 +317,7 @@ class AppLogger extends Thread {
                     Integer createDay = Integer.valueOf(fileName.substring(dIndex - 10, dIndex).replace("-", ""));
                     Calendar instance = Calendar.getInstance();
                     instance.add(Calendar.DAY_OF_MONTH, -beforeDay);
-                    Integer beforeDayInt = Integer.valueOf(sdf.format(instance.getTime()).replace("-", ""));
+                    Integer beforeDayInt = Integer.valueOf(fileNameSdf.format(instance.getTime()).replace("-", ""));
                     return createDay < beforeDayInt;
                 } catch (Exception e) {
                     return false;
@@ -329,6 +334,13 @@ class AppLogger extends Thread {
         appLogger.flushLog();
     }
 
+    private static String head() {
+        return headSdf.format(currentTimeMillis());
+    }
+
+    private static long currentTimeMillis() {
+        return System.currentTimeMillis() + splitTime;
+    }
 
     private static String callers() {
         StackTraceElement[] elements = new Throwable().getStackTrace();
@@ -409,6 +421,7 @@ class AppLogger extends Thread {
             return 2 == state;
         }
     }
+
 
     static class ALArrayList extends ArrayList<String> {
         private String name;

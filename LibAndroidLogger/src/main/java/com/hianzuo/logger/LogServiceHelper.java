@@ -191,6 +191,35 @@ public class LogServiceHelper implements ServiceConnection {
         }
     }
 
+
+    private boolean __splitTime(long time) {
+        ILogService service = this.mILogService;
+        if (null != service) {
+            try {
+                service.splitTime(time);
+                return true;
+            } catch (RemoteException ignored) {
+            }
+        }
+        return false;
+    }
+
+
+    public static synchronized void splitTime(long time) {
+        if (null != helper) {
+            if (helper.__splitTime(time)) {
+                //在LogService Progress中 splitTime 成功
+            } else {
+                if (helper.mConnectedBefore) {
+                    Log.e(TAG, "splitTime in other progress.");
+                    AppLogger.splitTime(time);
+                } else {
+                    Log.e(TAG, "log service not init(splitTime).");
+                }
+            }
+        }
+    }
+
     private class LockObj {
         private boolean isWaiting = false;
 
