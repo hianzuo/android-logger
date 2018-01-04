@@ -57,7 +57,7 @@ public class Log {
     }
 
     public static void e(String tag, String message, Throwable e) {
-        android.util.Log.e(tag, message, e);
+        android.util.Log.d(tag, message, e);
         String throwMsg = e.getMessage();
         if (null == throwMsg) throwMsg = e.getClass().getSimpleName();
         LogServiceHelper.append("E/" + tag + ": " + message + " Throwable:" + throwMsg);

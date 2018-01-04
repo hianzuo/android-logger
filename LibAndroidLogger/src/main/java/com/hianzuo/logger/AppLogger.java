@@ -91,7 +91,7 @@ class AppLogger extends Thread {
         if (st - lastFlushTime > 500) {
             lastFlushTime = st;
             interrupt();
-//            Log.e(TAG, "flush interrupt.");
+//            Log.d(TAG, "flush interrupt.");
         }
     }
 
@@ -129,10 +129,10 @@ class AppLogger extends Thread {
             } finally {
                 if (lockFailure) {
                     mLock.waitMillis(200);
-                    Log.e(TAG, "lock failure");
+                    Log.w(TAG, "lock failure");
                 } else {
                     mLock.waitMillis(20000);
-//                    Log.e(TAG, "flush finally.");
+//                    Log.d(TAG, "flush finally.");
                 }
 
             }
@@ -174,7 +174,7 @@ class AppLogger extends Thread {
                     String data = bufferToString(buffer);
                     raf.write(data.getBytes());
                     canRemoveBuffer = true;
-//                    Log.e(TAG, "flush success(" + buffer.size() + ").");
+//                    Log.d(TAG, "flush success(" + buffer.size() + ").");
                 } else {
                     lockFailure = true;
                 }

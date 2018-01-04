@@ -47,21 +47,23 @@ public class LogServiceHelper implements ServiceConnection {
     }
 
     private void bindILogService() {
-        Log.e(TAG, "log service is binding.");
+        Log.d(TAG, "log service is binding.");
         application.bindService(mIntent, this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        Log.e(TAG, "log service connected.");
+        Log.d(TAG, "log service connected.");
         mILogService = ILogService.Stub.asInterface(service);
-        if (null != prefix) __prefix(path, prefix);
+        if (null != prefix) {
+            __prefix(path, prefix);
+        }
         mConnectedBefore = true;
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        Log.e(TAG, "log service disconnected.");
+        Log.d(TAG, "log service disconnected.");
         mILogService = null;
         mLock.waitMillis(1000);
         bindILogService();
@@ -129,10 +131,10 @@ public class LogServiceHelper implements ServiceConnection {
                 //在LogService Progress中记录成功
             } else {
                 if (helper.mConnectedBefore) {
-                    Log.e(TAG, "log in other progress.");
+                    Log.w(TAG, "log in other progress.");
                     AppLogger.append(appContext, line);
                 } else {
-                    Log.e(TAG, "log service not init(" + line + ").");
+                    Log.w(TAG, "log service not init(" + line + ").");
                 }
             }
         }
@@ -144,10 +146,10 @@ public class LogServiceHelper implements ServiceConnection {
                 //在LogService Progress中Flush成功
             } else {
                 if (helper.mConnectedBefore) {
-                    Log.e(TAG, "flush in other progress.");
+                    Log.w(TAG, "flush in other progress.");
                     AppLogger.flush(appContext);
                 } else {
-                    Log.e(TAG, "log service not init(flush).");
+                    Log.w(TAG, "log service not init(flush).");
                 }
             }
         }
@@ -159,10 +161,10 @@ public class LogServiceHelper implements ServiceConnection {
                 //在LogService Progress中Flush成功
             } else {
                 if (helper.mConnectedBefore) {
-                    Log.e(TAG, "flush in other progress.");
+                    Log.w(TAG, "flush in other progress.");
                     AppLogger.delete(appContext, day);
                 } else {
-                    Log.e(TAG, "log service not init(flush).");
+                    Log.w(TAG, "log service not init(flush).");
                 }
             }
         }
@@ -174,7 +176,7 @@ public class LogServiceHelper implements ServiceConnection {
                 //在LogService Progress中Flush成功
             } else {
                 if (helper.mConnectedBefore) {
-                    Log.e(TAG, "flush in other progress.");
+                    Log.w(TAG, "flush in other progress.");
                     AppLogger.deleteAll(appContext, new AppLogger.DeleteLogCallback() {
                         @Override
                         public void callback(String result) {
@@ -185,7 +187,7 @@ public class LogServiceHelper implements ServiceConnection {
                         }
                     });
                 } else {
-                    Log.e(TAG, "log service not init(flush).");
+                    Log.w(TAG, "log service not init(flush).");
                 }
             }
         }
@@ -211,10 +213,10 @@ public class LogServiceHelper implements ServiceConnection {
                 //在LogService Progress中 splitTime 成功
             } else {
                 if (helper.mConnectedBefore) {
-                    Log.e(TAG, "splitTime in other progress.");
+                    Log.w(TAG, "splitTime in other progress.");
                     AppLogger.splitTime(time);
                 } else {
-                    Log.e(TAG, "log service not init(splitTime).");
+                    Log.w(TAG, "log service not init(splitTime).");
                 }
             }
         }

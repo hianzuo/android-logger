@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
        /* Log.deleteAll(new DeleteLogCallback() {
             @Override
             public void callback(String result) {
-                Log.e("MainActivity", result);
+                Log.d("MainActivity", result);
                 System.out.println("sssssssssss");
             }
         });
