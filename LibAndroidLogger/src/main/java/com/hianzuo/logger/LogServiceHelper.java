@@ -20,6 +20,8 @@ public class LogServiceHelper implements ServiceConnection {
     private final Intent mIntent;
     private static LogServiceHelper helper;
     private static String path;
+    private static int flushCount = -1;
+    private static int maxCacheCount = -1;
     private static String prefix;
     private static Application appContext;
     private static final String TAG = "AppLogger";
@@ -38,10 +40,16 @@ public class LogServiceHelper implements ServiceConnection {
     }
 
     public synchronized static void init(Application application, String path, String prefix) {
+        init(application, path, prefix, -1, -1);
+    }
+
+    public synchronized static void init(Application application, String path, String prefix, int flushCount, int maxCacheCount) {
         LogServiceHelper.appContext = application;
         if (null == helper) {
             LogServiceHelper.prefix = prefix;
             LogServiceHelper.path = path;
+            LogServiceHelper.flushCount = flushCount;
+            LogServiceHelper.maxCacheCount = maxCacheCount;
             LogServiceHelper.helper = new LogServiceHelper(application);
         }
     }
@@ -73,7 +81,7 @@ public class LogServiceHelper implements ServiceConnection {
         ILogService service = this.mILogService;
         if (null != service) {
             try {
-                return service.path(path, prefix);
+                return service.config(path, prefix, flushCount, maxCacheCount);
             } catch (RemoteException ignored) {
             }
         }

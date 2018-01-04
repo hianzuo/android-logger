@@ -22,8 +22,8 @@ import java.util.Locale;
  * On 14/12/16.
  */
 class AppLogger extends Thread {
-    private static final int FLUSH_COUNT = 50;
-    private static final int MAX_CACHE_COUNT = 3000;
+    private static int flushCount = 200;
+    private static int maxCacheCount = 5000;
     private static final SimpleDateFormat fileNameSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
     private static final SimpleDateFormat headSdf = new SimpleDateFormat("HH:mm:ss.SSS|", Locale.CHINESE);
 
@@ -48,18 +48,24 @@ class AppLogger extends Thread {
 
     public static synchronized AppLogger init(Context context) {
         if (null == appLogger) {
-            init(context, null, null);
+            init(context, null, null, -1, -1);
         }
         return appLogger;
     }
 
-    public static synchronized AppLogger init(Context context, String filePath, String filePrefix) {
+    public static synchronized AppLogger init(Context context, String filePath, String filePrefix, int flushCount, int maxCacheCount) {
         AppLogger.context = context;
         if (null != filePrefix) {
             AppLogger.filePrefix = filePrefix;
         }
         if (null != filePath) {
             AppLogger.filePath = filePath;
+        }
+        if (flushCount > -1) {
+            AppLogger.flushCount = flushCount;
+        }
+        if (maxCacheCount > -1) {
+            AppLogger.maxCacheCount = maxCacheCount;
         }
         if (null == appLogger) {
             appLogger = new AppLogger();
@@ -79,7 +85,7 @@ class AppLogger extends Thread {
             buffer.add(head() + " " + line);
             bufferSize = buffer.size();
         }
-        if (bufferSize > FLUSH_COUNT) {
+        if (bufferSize > flushCount) {
             flushLog();
         }
     }
@@ -194,7 +200,7 @@ class AppLogger extends Thread {
         } catch (Exception e) {
             Log.e(TAG, "lock exception", e);
         } finally {
-            if (buffer.size() >= MAX_CACHE_COUNT) {
+            if (buffer.size() >= maxCacheCount) {
                 canRemoveBuffer = true;
                 lockFailure = false;
             }

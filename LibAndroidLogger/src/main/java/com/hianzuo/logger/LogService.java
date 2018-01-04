@@ -19,10 +19,15 @@ public class LogService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return new ILogService.Stub() {
+            @Override
+            public boolean config(String path, String prefix, int flushCount, int maxCacheCount) throws RemoteException {
+                AppLogger.init(LogService.this, path, prefix, flushCount, maxCacheCount);
+                return true;
+            }
 
             @Override
             public boolean path(String path, String prefix) throws RemoteException {
-                AppLogger.init(LogService.this, path, prefix);
+                AppLogger.init(LogService.this, path, prefix, -1, -1);
                 return true;
             }
 

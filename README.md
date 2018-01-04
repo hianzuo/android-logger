@@ -8,7 +8,7 @@ In your `build.gradle`:
 
 ```gradle
  dependencies {
-   compile 'com.hianzuo.android:LibAndroidLogger:1.0.0'
+   compile 'com.hianzuo.android:LibAndroidLogger:1.0.9'
  }
 ```
 
