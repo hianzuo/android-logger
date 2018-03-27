@@ -1,5 +1,6 @@
 package com.hianzuo.logger;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,6 +27,8 @@ public class LogServiceHelper implements ServiceConnection {
     private static Application appContext;
     private static final String TAG = "AppLogger";
     private boolean mConnectedBefore = false;
+    private String mShortProgressName;
+    private String mProgressName;
 
     private LogServiceHelper(Application application) {
         this.application = application;
@@ -135,6 +138,8 @@ public class LogServiceHelper implements ServiceConnection {
 
     public static void append(String line) {
         if (null != helper) {
+            String shortProgressName = helper.getShortProcessName();
+            line = shortProgressName + "|" + line;
             if (helper.__append(line)) {
                 //在LogService Progress中记录成功
             } else {
@@ -256,5 +261,52 @@ public class LogServiceHelper implements ServiceConnection {
         public synchronized boolean waiting() {
             return isWaiting;
         }
+    }
+
+    public String getShortProcessName() {
+        if (null != mShortProgressName) {
+            return mShortProgressName;
+        } else {
+            String processName = getProcessName();
+            int index = processName.indexOf(":");
+            if (index > -1) {
+                mShortProgressName = processName.substring(index + 1);
+                if (mShortProgressName.length() >= 4) {
+                    mShortProgressName = mShortProgressName.substring(0, 4);
+                } else {
+                    mShortProgressName = mShortProgressName + joinStrByCount(" ", 4 - mShortProgressName.length());
+                }
+            } else {
+                mShortProgressName = "Main";
+            }
+            return mShortProgressName;
+        }
+    }
+
+    private String joinStrByCount(String str, int count) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            sb.append(str);
+        }
+        return sb.toString();
+    }
+
+
+    public String getProcessName() {
+        if (null != mProgressName) {
+            return mProgressName;
+        } else {
+            int pid = android.os.Process.myPid();
+            ActivityManager mActivityManager = (ActivityManager)
+                    application.getSystemService(Context.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager
+                    .getRunningAppProcesses()) {
+                if (appProcess.pid == pid) {
+                    mProgressName = appProcess.processName;
+                    break;
+                }
+            }
+        }
+        return mProgressName;
     }
 }

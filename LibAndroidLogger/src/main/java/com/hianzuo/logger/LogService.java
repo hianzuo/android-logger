@@ -11,8 +11,10 @@ import android.os.RemoteException;
  * On 2016/4/29.
  */
 public class LogService extends Service {
+    @Override
     public void onCreate() {
         super.onCreate();
+        LogServiceHelper.init(getApplication());
     }
 
 

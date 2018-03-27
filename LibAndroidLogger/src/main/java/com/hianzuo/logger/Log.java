@@ -5,7 +5,6 @@ import android.os.RemoteException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by Ryan
@@ -13,7 +12,7 @@ import java.text.SimpleDateFormat;
  */
 public class Log {
     public static final int VERBOSE = android.util.Log.VERBOSE;
-    public static int DEBUG = android.util.Log.DEBUG;
+    public static final int DEBUG = android.util.Log.DEBUG;
     public static final int INFO = android.util.Log.INFO;
     public static final int WARN = android.util.Log.WARN;
     public static final int ERROR = android.util.Log.ERROR;
@@ -78,19 +77,62 @@ public class Log {
     }
 
     public static void eThrowable(String tag, Throwable e) {
+        logThrowable(Log.ERROR, tag, e);
+    }
+
+    public static void logThrowable(int level, String tag, Throwable e) {
         if (null == e) {
             return;
         }
         String lines = toString(e);
-        eLines(tag, lines);
+        logLines(level, tag, lines);
+    }
+
+    public static void eStackTrace(String tag, StackTraceElement[] elements) {
+        logStackTrace(Log.ERROR, tag, elements);
+    }
+
+    public static void logStackTrace(int level, String tag, StackTraceElement[] elements) {
+        if (null == elements) {
+            return;
+        }
+        for (StackTraceElement element : elements) {
+            logStr(level, tag, element.toString());
+        }
+    }
+
+    private static void logStr(int level, String tag, String str) {
+        switch (level) {
+            case VERBOSE:
+                Log.v(tag, str);
+                break;
+            case DEBUG:
+                Log.d(tag, str);
+                break;
+            case INFO:
+                Log.i(tag, str);
+                break;
+            case WARN:
+                Log.w(tag, str);
+                break;
+            case ERROR:
+                Log.e(tag, str);
+                break;
+            default:
+                throw new IllegalArgumentException("un support log level : " + level);
+        }
     }
 
     public static void eLines(String tag, String lines) {
+        logLines(Log.ERROR, tag, lines);
+    }
+
+    public static void logLines(int level, String tag, String lines) {
         if (null != lines && lines.length() > 0) {
             String[] ss = lines.split("\n");
             if (ss.length > 0) {
                 for (String s : ss) {
-                    Log.e(tag, s.replace("\t", "        "));
+                    Log.logStr(level, tag, s.replace("\t", "        "));
                 }
                 LogServiceHelper.flush();
             }
