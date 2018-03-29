@@ -70,7 +70,7 @@ public class LogServiceHelper implements ServiceConnection {
         Log.d(TAG, "log service connected.");
         mILogService = ILogService.Stub.asInterface(service);
         if (null != prefix) {
-            __prefix(path, prefix);
+            prefixInternal(path, prefix);
         }
         mConnectedBefore = true;
     }
@@ -83,7 +83,7 @@ public class LogServiceHelper implements ServiceConnection {
         bindILogService();
     }
 
-    private boolean __prefix(String path, String prefix) {
+    private boolean prefixInternal(String path, String prefix) {
         ILogService service = this.mILogService;
         if (null != service) {
             try {
@@ -94,7 +94,7 @@ public class LogServiceHelper implements ServiceConnection {
         return false;
     }
 
-    private boolean __flush() {
+    private boolean flushInternal() {
         ILogService service = this.mILogService;
         if (null != service) {
             try {
@@ -105,7 +105,7 @@ public class LogServiceHelper implements ServiceConnection {
         return false;
     }
 
-    private boolean __delete(int day) {
+    private boolean deleteInternal(int day) {
         ILogService service = this.mILogService;
         if (null != service) {
             try {
@@ -116,7 +116,7 @@ public class LogServiceHelper implements ServiceConnection {
         return false;
     }
 
-    private boolean __deleteAll(IDeleteLogCallback callback) {
+    private boolean deleteAllInternal(IDeleteLogCallback callback) {
         ILogService service = this.mILogService;
         if (null != service) {
             try {
@@ -185,7 +185,7 @@ public class LogServiceHelper implements ServiceConnection {
 
     public static void flush() {
         if (null != helper) {
-            if (helper.__flush()) {
+            if (helper.flushInternal()) {
                 //在LogService Progress中Flush成功
             } else {
                 if (helper.mConnectedBefore) {
@@ -200,7 +200,7 @@ public class LogServiceHelper implements ServiceConnection {
 
     public static void delete(int day) {
         if (null != helper) {
-            if (helper.__delete(day)) {
+            if (helper.deleteInternal(day)) {
                 //在LogService Progress中Flush成功
             } else {
                 if (helper.mConnectedBefore) {
@@ -215,7 +215,7 @@ public class LogServiceHelper implements ServiceConnection {
 
     public static void deleteAll(final IDeleteLogCallback callback) {
         if (null != helper) {
-            if (helper.__deleteAll(callback)) {
+            if (helper.deleteAllInternal(callback)) {
                 //在LogService Progress中Flush成功
             } else {
                 if (helper.mConnectedBefore) {
@@ -237,7 +237,7 @@ public class LogServiceHelper implements ServiceConnection {
     }
 
 
-    private boolean __splitTime(long time) {
+    private boolean splitTimeInternal(long time) {
         ILogService service = this.mILogService;
         if (null != service) {
             try {
@@ -252,7 +252,7 @@ public class LogServiceHelper implements ServiceConnection {
 
     public static synchronized void splitTime(long time) {
         if (null != helper) {
-            if (helper.__splitTime(time)) {
+            if (helper.splitTimeInternal(time)) {
                 //在LogService Progress中 splitTime 成功
             } else {
                 if (helper.mConnectedBefore) {

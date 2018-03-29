@@ -145,7 +145,7 @@ class AppLogger extends Thread {
                 } else {
                     ALArrayList buffer = getFlushBuffer();
                     try {
-                        lockFailure = __flush_to_file_ret_lock_failure(buffer);
+                        lockFailure = flushToFileRetLockFailure(buffer);
                     } finally {
                         exChangeBackOnFlushBuffer(buffer);
                     }
@@ -184,7 +184,7 @@ class AppLogger extends Thread {
         }
     }
 
-    private static boolean __flush_to_file_ret_lock_failure(List<String> buffer) {
+    private static boolean flushToFileRetLockFailure(List<String> buffer) {
         RandomAccessFile raf = null;
         FileLock fileLock = null;
         if (buffer.size() <= 0) {
