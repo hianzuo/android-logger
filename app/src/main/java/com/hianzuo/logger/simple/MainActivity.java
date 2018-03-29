@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void success() {
                 LogServiceHelper.init(getApplication(), "/sdcard/hianzuo", "hianzuo_test_", 100, 1000);
-
                 Toast.makeText(MainActivity.this, "成功", Toast.LENGTH_LONG).show();
             }
 
@@ -47,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("MainActivity", "onTestClick ");
         Log.eStackTrace("MainActivity", Thread.currentThread().getStackTrace());
+        Log.eThrowable("MainActivity", new RuntimeException("AAAAAAA"));
+        Log.eLines("AAAAAAAAAA","aaaa\nbbbbb\nccccc\nddddd\neeeeee");
+        Log.e("BBBBBB","msg",new RuntimeException("BBBBBBB"));
         LogServiceHelper.splitTime(5000L);
         LogServiceHelper.flush();
 

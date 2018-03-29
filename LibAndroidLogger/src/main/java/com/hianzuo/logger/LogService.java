@@ -6,6 +6,8 @@ import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
+import java.util.List;
+
 /**
  * Created by Ryan
  * On 2016/4/29.
@@ -36,6 +38,12 @@ public class LogService extends Service {
             @Override
             public boolean append(String line) throws RemoteException {
                 AppLogger.append(LogService.this, line);
+                return true;
+            }
+
+            @Override
+            public boolean appendLines(List<String> lines) throws RemoteException {
+                AppLogger.append(LogService.this, lines);
                 return true;
             }
 

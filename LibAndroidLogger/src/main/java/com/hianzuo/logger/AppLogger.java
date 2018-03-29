@@ -13,6 +13,7 @@ import java.nio.channels.OverlappingFileLockException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +27,7 @@ class AppLogger extends Thread {
     private static int maxCacheCount = 5000;
     private static final SimpleDateFormat fileNameSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
     private static final SimpleDateFormat headSdf = new SimpleDateFormat("HH:mm:ss.SSS|", Locale.CHINESE);
+    private static final String headSdfBlank = "             ";
 
     private static String filePrefix = null;
     private static String filePath = null;
@@ -74,15 +76,33 @@ class AppLogger extends Thread {
         return appLogger;
     }
 
-    public static synchronized void append(Context context, String line) {
+    public static synchronized void append(Context context, List<String> lines) {
         init(context);
-        appLogger.__append(line);
+        appLogger.appendInternal(lines);
     }
 
-    private synchronized void __append(String line) {
+    public static synchronized void append(Context context, String line) {
+        init(context);
+        appLogger.appendInternal(line);
+    }
+
+    private synchronized void appendInternal(String line) {
+        appendInternal(Collections.singletonList(line));
+    }
+
+    private synchronized void appendInternal(List<String> lines) {
         int bufferSize;
         synchronized (mLock) {
-            buffer.add(head() + " " + line);
+            String head = head();
+            boolean isFirst = true;
+            for (String line : lines) {
+                if (isFirst) {
+                    isFirst = false;
+                    buffer.add(head + line);
+                } else {
+                    buffer.add(headSdfBlank + line);
+                }
+            }
             bufferSize = buffer.size();
         }
         if (bufferSize > flushCount) {
@@ -167,7 +187,9 @@ class AppLogger extends Thread {
     private static boolean __flush_to_file_ret_lock_failure(List<String> buffer) {
         RandomAccessFile raf = null;
         FileLock fileLock = null;
-        if (buffer.size() <= 0) return false;
+        if (buffer.size() <= 0) {
+            return false;
+        }
         boolean lockFailure = false;
         boolean canRemoveBuffer = false;
         try {

@@ -5,6 +5,8 @@ import android.os.RemoteException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ryan
@@ -19,41 +21,66 @@ public class Log {
     public static final int ASSERT = android.util.Log.ASSERT;
 
 
-    public static void e(String tag, String message) {
-        android.util.Log.e(tag, message);
-        LogServiceHelper.append("E/" + tag + ": " + message);
+    public static void e(String tag, String... message) {
+        for (String line : message) {
+            android.util.Log.e(tag, line);
+        }
+        LogServiceHelper.appendLines(getLines("E", tag, message));
     }
 
-    public static void v(String tag, String message) {
-        android.util.Log.v(tag, message);
-        LogServiceHelper.append("V/" + tag + ": " + message);
+    private static List<String> getLines(String level, String tag, String... message) {
+        List<String> lines = new ArrayList<>();
+        String prefix = level + "/" + tag + ": ";
+        String prefixBlank = LogServiceHelper.countStrToString(" ", prefix.length());
+        boolean isFirst = true;
+        for (String m : message) {
+            if (isFirst) {
+                isFirst = false;
+                lines.add(prefix + m);
+            } else {
+                lines.add(prefixBlank + m);
+            }
+        }
+        return lines;
     }
 
-    public static void i(String tag, String message) {
-        android.util.Log.i(tag, message);
-        LogServiceHelper.append("I/" + tag + ": " + message);
+
+    public static void v(String tag, String... message) {
+        for (String line : message) {
+            android.util.Log.v(tag, line);
+        }
+        LogServiceHelper.appendLines(getLines("V", tag, message));
     }
 
-    public static void d(String tag, String message) {
-        android.util.Log.d(tag, message);
-        LogServiceHelper.append("D/" + tag + ": " + message);
+    public static void i(String tag, String... message) {
+        for (String line : message) {
+            android.util.Log.i(tag, line);
+        }
+        LogServiceHelper.appendLines(getLines("I", tag, message));
     }
 
-    public static void w(String tag, String message) {
-        android.util.Log.w(tag, message);
-        LogServiceHelper.append("W/" + tag + ": " + message);
+    public static void d(String tag, String... message) {
+        for (String line : message) {
+            android.util.Log.d(tag, line);
+        }
+        LogServiceHelper.appendLines(getLines("D", tag, message));
+    }
+
+    public static void w(String tag, String... message) {
+        for (String line : message) {
+            android.util.Log.w(tag, line);
+        }
+        LogServiceHelper.appendLines(getLines("W", tag, message));
     }
 
     public static void w(String tag, String message, Throwable e) {
-        android.util.Log.w(tag, message, e);
-        String throwMsg = getThrowMessage(e);
-        LogServiceHelper.append("W/" + tag + ": " + message + " Throwable:" + throwMsg);
+        Log.w(tag, message);
+        Log.logThrowable(Log.WARN, tag, e);
     }
 
     public static void e(String tag, String message, Throwable e) {
-        android.util.Log.d(tag, message, e);
-        String throwMsg = getThrowMessage(e);
-        LogServiceHelper.append("E/" + tag + ": " + message + " Throwable:" + throwMsg);
+        Log.e(tag, message);
+        Log.logThrowable(Log.ERROR, tag, e);
     }
 
     public static void println(int priority, String tag, String message) {
@@ -96,12 +123,18 @@ public class Log {
         if (null == elements) {
             return;
         }
+        List<String> lines = new ArrayList<>();
         for (StackTraceElement element : elements) {
-            logStr(level, tag, element.toString());
+            lines.add(element.toString());
         }
+        logStr(level, tag, lines);
     }
 
-    private static void logStr(int level, String tag, String str) {
+    private static void logStr(int level, String tag, List<String> lines) {
+        logStr(level, tag, listToArray(lines));
+    }
+
+    private static void logStr(int level, String tag, String... str) {
         switch (level) {
             case VERBOSE:
                 Log.v(tag, str);
@@ -127,16 +160,30 @@ public class Log {
         logLines(Log.ERROR, tag, lines);
     }
 
-    public static void logLines(int level, String tag, String lines) {
-        if (null != lines && lines.length() > 0) {
-            String[] ss = lines.split("\n");
+    private static String[] listToArray(List<String> lines) {
+        String[] arrays = new String[lines.size()];
+        int i = 0;
+        for (String line : lines) {
+            arrays[i++] = line;
+        }
+        return arrays;
+    }
+
+    private static List<String> formatToLines(String mutiLineMsg) {
+        List<String> lines = new ArrayList<>();
+        if (null != mutiLineMsg && mutiLineMsg.length() > 0) {
+            String[] ss = mutiLineMsg.split("\n");
             if (ss.length > 0) {
                 for (String s : ss) {
-                    Log.logStr(level, tag, s.replace("\t", "        "));
+                    lines.add(s.replace("\t", "        "));
                 }
-                LogServiceHelper.flush();
             }
         }
+        return lines;
+    }
+
+    public static void logLines(int level, String tag, String lines) {
+        Log.logStr(level, tag, formatToLines(lines));
     }
 
 

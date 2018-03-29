@@ -10,6 +10,9 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Ryan
  * On 2016/4/29.
@@ -125,32 +128,59 @@ public class LogServiceHelper implements ServiceConnection {
         return false;
     }
 
-    private boolean __append(String line) {
+
+    private boolean appendLinesInternal(List<String> lines) {
         ILogService service = this.mILogService;
         if (null != service) {
             try {
-                return service.append(line);
+                return service.appendLines(lines);
             } catch (RemoteException ignored) {
             }
         }
         return false;
     }
 
-    public static void append(String line) {
+    public static void appendLines(List<String> lines) {
         if (null != helper) {
             String shortProgressName = helper.getShortProcessName();
-            line = shortProgressName + "|" + line;
-            if (helper.__append(line)) {
+            long threadId = Thread.currentThread().getId();
+            List<String> newLines = new ArrayList<>();
+            String prefix = shortProgressName + "|" + threadId + "|";
+            String prefixBlank = countStrToString(" ", prefix.length());
+            boolean isFirst = true;
+            for (String line : lines) {
+                if (isFirst) {
+                    isFirst = false;
+                    newLines.add(prefix + line);
+                } else {
+                    newLines.add(prefixBlank + line);
+                }
+            }
+            if (helper.appendLinesInternal(newLines)) {
                 //在LogService Progress中记录成功
             } else {
                 if (helper.mConnectedBefore) {
                     Log.w(TAG, "log in other progress.");
-                    AppLogger.append(appContext, line);
+                    AppLogger.append(appContext, newLines);
                 } else {
-                    Log.w(TAG, "log service not init(" + line + ").");
+                    for (String line : lines) {
+                        Log.w(TAG, "log service not init(" + line + ").");
+                    }
                 }
             }
         }
+    }
+
+    static String countStrToString(String str, int length) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            sb.append(str);
+        }
+        return sb.toString();
+    }
+
+    public static void append(String line) {
+
     }
 
     public static void flush() {
