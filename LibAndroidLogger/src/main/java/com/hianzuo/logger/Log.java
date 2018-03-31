@@ -66,12 +66,12 @@ public class Log {
     }
 
     public static void d(String tag, String... messages) {
-        android.util.Log.i(tag, getLogMessage(messages));
+        android.util.Log.d(tag, getLogMessage(messages));
         LogServiceHelper.appendLines(getLines("D", tag, messages));
     }
 
     public static void w(String tag, String... messages) {
-        android.util.Log.i(tag, getLogMessage(messages));
+        android.util.Log.w(tag, getLogMessage(messages));
         LogServiceHelper.appendLines(getLines("W", tag, messages));
     }
 
