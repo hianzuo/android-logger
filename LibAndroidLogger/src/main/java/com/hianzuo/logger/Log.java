@@ -21,19 +21,29 @@ public class Log {
     public static final int ASSERT = android.util.Log.ASSERT;
 
 
-    public static void e(String tag, String... message) {
-        for (String line : message) {
-            android.util.Log.e(tag, line);
-        }
-        LogServiceHelper.appendLines(getLines("E", tag, message));
+    public static void e(String tag, String... messages) {
+        android.util.Log.e(tag, getLogMessage(messages));
+        LogServiceHelper.appendLines(getLines("E", tag, messages));
     }
 
-    private static List<String> getLines(String level, String tag, String... message) {
+    private static String getLogMessage(String... messages) {
+        if (messages.length == 1) {
+            return messages[0];
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String message : messages) {
+            sb.append(message);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    private static List<String> getLines(String level, String tag, String... messages) {
         List<String> lines = new ArrayList<>();
         String prefix = level + "/" + tag + ": ";
         String prefixBlank = LogServiceHelper.countStrToString(" ", prefix.length());
         boolean isFirst = true;
-        for (String m : message) {
+        for (String m : messages) {
             if (isFirst) {
                 isFirst = false;
                 lines.add(prefix + m);
@@ -45,36 +55,28 @@ public class Log {
     }
 
 
-    public static void v(String tag, String... message) {
-        for (String line : message) {
-            android.util.Log.v(tag, line);
-        }
-        LogServiceHelper.appendLines(getLines("V", tag, message));
+    public static void v(String tag, String... messages) {
+        android.util.Log.v(tag, getLogMessage(messages));
+        LogServiceHelper.appendLines(getLines("V", tag, messages));
     }
 
-    public static void i(String tag, String... message) {
-        for (String line : message) {
-            android.util.Log.i(tag, line);
-        }
-        LogServiceHelper.appendLines(getLines("I", tag, message));
+    public static void i(String tag, String... messages) {
+        android.util.Log.i(tag, getLogMessage(messages));
+        LogServiceHelper.appendLines(getLines("I", tag, messages));
     }
 
-    public static void d(String tag, String... message) {
-        for (String line : message) {
-            android.util.Log.d(tag, line);
-        }
-        LogServiceHelper.appendLines(getLines("D", tag, message));
+    public static void d(String tag, String... messages) {
+        android.util.Log.i(tag, getLogMessage(messages));
+        LogServiceHelper.appendLines(getLines("D", tag, messages));
     }
 
-    public static void w(String tag, String... message) {
-        for (String line : message) {
-            android.util.Log.w(tag, line);
-        }
-        LogServiceHelper.appendLines(getLines("W", tag, message));
+    public static void w(String tag, String... messages) {
+        android.util.Log.i(tag, getLogMessage(messages));
+        LogServiceHelper.appendLines(getLines("W", tag, messages));
     }
 
-    public static void w(String tag, String message, Throwable e) {
-        Log.w(tag, message);
+    public static void w(String tag, String messages, Throwable e) {
+        Log.w(tag, messages);
         Log.logThrowable(Log.WARN, tag, e);
     }
 
@@ -83,9 +85,9 @@ public class Log {
         Log.logThrowable(Log.ERROR, tag, e);
     }
 
-    public static void println(int priority, String tag, String message) {
-        android.util.Log.println(priority, tag, message);
-        LogServiceHelper.append("PrintLn/" + tag + ": " + message);
+    public static void println(int priority, String tag, String messages) {
+        android.util.Log.println(priority, tag, messages);
+        LogServiceHelper.append("PrintLn/" + tag + ": " + messages);
     }
 
     public static String getStackTraceString(Throwable tr) {

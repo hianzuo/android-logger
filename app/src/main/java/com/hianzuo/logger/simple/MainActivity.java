@@ -37,14 +37,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onTestClick(View view) {
-        for (int i = 0; i < 10; i++) {
+       /* for (int i = 0; i < 10; i++) {
             Log.d("MainActivity", "onTestClick " + i);
         }
         Log.d("MainActivity", "onTestClick ");
 
         Log.d("MainActivity", "onTestClick ");
 
-        Log.d("MainActivity", "onTestClick ");
+        Log.d("MainActivity", "onTestClick ");*/
         Log.eStackTrace("MainActivity", Thread.currentThread().getStackTrace());
         Log.eThrowable("MainActivity", new RuntimeException("AAAAAAA"));
         Log.eLines("AAAAAAAAAA","aaaa\nbbbbb\nccccc\nddddd\neeeeee");
