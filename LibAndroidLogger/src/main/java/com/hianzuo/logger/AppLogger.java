@@ -275,10 +275,7 @@ class AppLogger extends Thread {
     }
 
     private synchronized static File getOutFile() {
-        if (null == filePrefix) {
-            filePrefix = null != context ? context.getPackageName().replace(".", "_") : "com_hianzuo_logger";
-        }
-        String fileName = filePrefix + fileNameSdf.format(new Date()) + ".log";
+        String fileName = getTodayLogFilePath();
         File fileDir;
         if (null == filePath) {
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -303,6 +300,21 @@ class AppLogger extends Thread {
             Log.e("AppLogger", "日志文件创建失败(" + fileDir.getAbsolutePath() + ").");
             return null;
         }
+    }
+
+    public static String getTodayLogFilePath() {
+        if (null == filePrefix) {
+            filePrefix = null != context ? context.getPackageName()
+                    .replace(".", "_") : "com_hianzuo_logger";
+        }
+        return filePrefix + fileNameSdf.format(new Date()) + ".log";
+    }
+
+    public static String getLogFileDir() {
+        if (null == filePath) {
+            return Environment.getExternalStorageDirectory() + File.separator + "logs";
+        }
+        return filePath;
     }
 
     public static synchronized void splitTime(long time) {
@@ -360,6 +372,7 @@ class AppLogger extends Thread {
             init(context);
         }
         appLogger.flushLog();
+        ZipLogSupport.zipLogFiles();
     }
 
     private static String head() {

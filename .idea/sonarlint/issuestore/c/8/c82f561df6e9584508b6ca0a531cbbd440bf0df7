@@ -1,0 +1,16 @@
+
+^squid:UselessImportCheck"4Remove this unused import 'android.app.Application'.(Ά¶ÿI8ύ‡οεί-
+_squid:UselessImportCheck"4Remove this unused import 'android.content.Context'.(©Κ‰θ8ΦΖΨβί-
+"squid:ClassVariableVisibilityCheck"XMake mLastZipTime a static final constant or non-public and provide accessors if needed.(«ν£μ8Ϊμ³›έ-
+Rsquid:S1066""/Merge this if statement with the enclosing one.(€ή¥ϊÿÿÿÿ8ώ”Ύ›έ-
+lsquid:S4042."IUse "java.nio.Files#delete" here for better messages on error conditions.(²­ϋÿÿÿÿ8βασεί-
+psquid:S3776 "RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(τχΐ8γΧΚβί-
+]
+squid:S899.";Do something with the "boolean" value returned by "delete".(²­ϋÿÿÿÿ8βασεί-
+]squid:S1118":Add a private constructor to hide the implicit public one.(•¨­ωÿÿÿÿ8γΜ±›έ-
+Psquid:S1444"2Make this "public static mLastZipTime" field final(«ν£μ8Ϊμ³›έ-
+esquid:UselessImportCheck":Remove this unused import 'java.util.zip.ZipOutputStream'.(ό“–8κ„υεί-
+_squid:UselessImportCheck	"5Remove this unused import 'java.io.FileOutputStream'.(«ªg8κ„υεί-
+_squid:UselessImportCheck"4Remove this unused import 'java.io.FileInputStream'.(³ΙΣ8κ„υεί-
+csquid:UselessImportCheck
+"3Remove this unused import 'java.util.zip.ZipEntry'.(ησόΫόÿÿÿÿ8κ„υεί-
