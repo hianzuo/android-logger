@@ -2,6 +2,7 @@ package com.hianzuo.logger;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.Closeable;
@@ -350,17 +351,19 @@ class AppLogger extends Thread {
     }
 
     private static boolean isBeforeDay(String fileName, int beforeDay) {
-        if (null != fileName && fileName.endsWith(".log")) {
-            int dIndex = fileName.lastIndexOf(".");
-            if (dIndex > 0 && fileName.length() > 12) {
-                try {
-                    Integer createDay = Integer.valueOf(fileName.substring(dIndex - 10, dIndex).replace("-", ""));
-                    Calendar instance = Calendar.getInstance();
-                    instance.add(Calendar.DAY_OF_MONTH, -beforeDay);
-                    Integer beforeDayInt = Integer.valueOf(fileNameSdf.format(instance.getTime()).replace("-", ""));
-                    return createDay < beforeDayInt;
-                } catch (Exception e) {
-                    return false;
+        if(!TextUtils.isEmpty(fileName)){
+            if(fileName.contains(".log")){
+                int dIndex = fileName.indexOf(".");
+                if (dIndex > 0 && fileName.length() > 12) {
+                    try {
+                        Integer createDay = Integer.valueOf(fileName.substring(dIndex - 10, dIndex).replace("-", ""));
+                        Calendar instance = Calendar.getInstance();
+                        instance.add(Calendar.DAY_OF_MONTH, -beforeDay);
+                        Integer beforeDayInt = Integer.valueOf(fileNameSdf.format(instance.getTime()).replace("-", ""));
+                        return createDay < beforeDayInt;
+                    } catch (Exception e) {
+                        return false;
+                    }
                 }
             }
         }
