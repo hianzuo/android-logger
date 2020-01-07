@@ -30,12 +30,14 @@ public class ZipLogSupport {
                     String path;
                     for (File file : files) {
                         path = file.getAbsolutePath();
-                        if (file.getName().equals(todayLogFilePath) || ZipUtils.isZipFile(path)) {
-                            return;
+                        String fileName = file.getName();
+                        if (file.getName().equals(todayLogFilePath) || fileName.contains(".zip")) {
+                            continue;
                         }
                         ZipUtils.zipFile(file, path + ".zip");
                         file.delete();
                     }
+                    mLastZipTime = System.currentTimeMillis();
                 }
             }
         }
