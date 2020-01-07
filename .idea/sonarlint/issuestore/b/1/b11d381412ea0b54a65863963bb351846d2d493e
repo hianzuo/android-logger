@@ -1,17 +1,17 @@
 
-jsquid:ModifiersOrderCheck0"EReorder the modifiers to comply with the Java Language Specification.(ÁÓÓ¡
-osquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ıóÿüÿÿÿÿ
+^squid:S3027­"FPut single-quotes around ':' to use the faster "indexOf(char)" method.(áß¼Ş
+Gsquid:S00108‰")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
 Gsquid:S00108ä")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
-Rsquid:S2274—":Remove this call to "wait" or move it into a "while" loop.(ÔÒØ–
-Fsquid:S00108q")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
 Fsquid:S00108[")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
+Fsquid:S00108}")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
+Fsquid:S00108q")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
+osquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ıóÿüÿÿÿÿ
+vsquid:S1192À"YDefine a constant instead of duplicating this literal "flush in other progress." 3 times.(ğÂ¡Àùÿÿÿÿ
+Gsquid:S00108ö")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
+jsquid:ModifiersOrderCheck0"EReorder the modifiers to comply with the Java Language Specification.(ÁÓÓ¡
 jsquid:ModifiersOrderCheck,"EReorder the modifiers to comply with the Java Language Specification.(²‡Á
 zsquid:S1192Ã"]Define a constant instead of duplicating this literal "log service not init(flush)." 3 times.(ƒù›Æşÿÿÿÿ
 Fsquid:S00108f")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
-Gsquid:S00108ö")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
-Fsquid:S00108}")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
-Gsquid:S00108‰")Either remove or fill this block of code.(ˆ™¹Şıÿÿÿÿ
-jsquid:ModifiersOrderCheck4"EReorder the modifiers to comply with the Java Language Specification.(óş‘é
-vsquid:S1192À"YDefine a constant instead of duplicating this literal "flush in other progress." 3 times.(ğÂ¡Àùÿÿÿÿ
 squid:S1186¶"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(½„çëÿÿÿÿÿ
-^squid:S3027­"FPut single-quotes around ':' to use the faster "indexOf(char)" method.(áß¼Ş
+Rsquid:S2274—":Remove this call to "wait" or move it into a "while" loop.(ÔÒØ–
+jsquid:ModifiersOrderCheck4"EReorder the modifiers to comply with the Java Language Specification.(óş‘é
