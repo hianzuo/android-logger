@@ -30,8 +30,7 @@ public class ZipLogSupport {
                     String path;
                     for (File file : files) {
                         path = file.getAbsolutePath();
-                        String fileName = file.getName();
-                        if (file.getName().equals(todayLogFilePath) || fileName.contains(".zip")) {
+                        if (file.getName().equals(todayLogFilePath) || ZipUtils.isZipFile(path)) {
                             continue;
                         }
                         ZipUtils.zipFile(file, path + ".zip");
