@@ -275,7 +275,7 @@ class AppLogger extends Thread {
         }
     }
 
-    private synchronized static File getOutFile() {
+    public synchronized static File getOutFile() {
         String fileName = getTodayLogFilePath();
         File fileDir;
         if (null == filePath) {

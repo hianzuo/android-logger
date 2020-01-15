@@ -23,9 +23,9 @@ public class ZipLogSupport {
     public static void zipLogFiles() {
         if ((System.currentTimeMillis() - mLastZipTime) > ZIP_TIME_INTERVAL) {
             if (isSDCardEnable()) {
-                File dir = new File(AppLogger.getLogFileDir());
-                if (dir.exists() && dir.isDirectory()) {
-                    File[] files = dir.listFiles();
+                File outFile = AppLogger.getOutFile();
+                if (null != outFile && outFile.exists()) {
+                    File[] files = outFile.getParentFile().listFiles();
                     String todayLogFilePath = AppLogger.getTodayLogFilePath();
                     String path;
                     for (File file : files) {
