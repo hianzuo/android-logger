@@ -205,7 +205,7 @@ public class LogServiceHelper implements ServiceConnection {
             } else {
                 if (helper.mConnectedBefore) {
                     Log.w(TAG, "flush in other progress.");
-                    AppLogger.delete(appContext, day);
+                    AppLogger.deleteAndZip(appContext, day);
                 } else {
                     Log.w(TAG, "log service not init(flush).");
                 }

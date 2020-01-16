@@ -55,7 +55,7 @@ public class LogService extends Service {
 
             @Override
             public boolean delete(int beforeDay) throws RemoteException {
-                AppLogger.delete(LogService.this, beforeDay);
+                AppLogger.deleteAndZip(LogService.this, beforeDay);
                 return true;
             }
 

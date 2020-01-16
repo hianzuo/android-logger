@@ -39,7 +39,7 @@ class AppLogger extends Thread {
     private ALArrayList tempBuffer = new ALArrayList("temp");
     private ALArrayList buffer = new ALArrayList("main");
     private final LockObj mLock = new LockObj();
-    private DeleteLogTask deleteLogTask = null;
+    private DeleteAndZipLogTask deleteAndZipLogTask = null;
 
     private AppLogger() {
         setName("AppLogger_Thread");
@@ -122,9 +122,9 @@ class AppLogger extends Thread {
         }
     }
 
-    private synchronized void deleteLog(DeleteLogCallback callback, String... files) {
-        if (null == deleteLogTask || deleteLogTask.isDone()) {
-            deleteLogTask = new DeleteLogTask(callback, files);
+    private synchronized void deleteAndZipLog(DeleteLogCallback callback, String... files) {
+        if (null == deleteAndZipLogTask || deleteAndZipLogTask.isDone()) {
+            deleteAndZipLogTask = new DeleteAndZipLogTask(callback, files);
             interrupt();
         } else {
             callback.callback("日志正在删除中.");
@@ -137,11 +137,11 @@ class AppLogger extends Thread {
         while (true) {
             boolean lockFailure = false;
             try {
-                if (null != deleteLogTask) {
-                    if (deleteLogTask.isNew()) {
-                        deleteLogTask.run();
-                    } else if (deleteLogTask.isDone()) {
-                        deleteLogTask = null;
+                if (null != deleteAndZipLogTask) {
+                    if (deleteAndZipLogTask.isNew()) {
+                        deleteAndZipLogTask.run();
+                    } else if (deleteAndZipLogTask.isDone()) {
+                        deleteAndZipLogTask = null;
                     }
                 } else {
                     ALArrayList buffer = getFlushBuffer();
@@ -324,10 +324,10 @@ class AppLogger extends Thread {
 
     public static synchronized void deleteAll(Context context, DeleteLogCallback callback) {
         init(context);
-        appLogger.deleteLog(callback);
+        appLogger.deleteAndZipLog(callback);
     }
 
-    public static synchronized void delete(Context context, int beforeDay) {
+    public static synchronized void deleteAndZip(Context context, int beforeDay) {
         init(context);
         File file = getOutFile();
         List<String> files = new ArrayList<>();
@@ -342,7 +342,7 @@ class AppLogger extends Thread {
             }
         }
         if (files.size() > 0) {
-            appLogger.deleteLog(new DeleteLogCallback() {
+            appLogger.deleteAndZipLog(new DeleteLogCallback() {
                 @Override
                 public void callback(String result) {
                 }
@@ -375,7 +375,6 @@ class AppLogger extends Thread {
             init(context);
         }
         appLogger.flushLog();
-        ZipLogSupport.zipLogFiles();
     }
 
     private static String head() {
@@ -404,12 +403,12 @@ class AppLogger extends Thread {
         void callback(String result);
     }
 
-    class DeleteLogTask {
+    class DeleteAndZipLogTask {
         private File[] files;
         private int state = 0;
         private DeleteLogCallback callback;
 
-        public DeleteLogTask(DeleteLogCallback callback, String... files) {
+        public DeleteAndZipLogTask(DeleteLogCallback callback, String... files) {
             this.files = new File[files.length];
             for (int i = 0; i < files.length; i++) {
                 this.files[i] = new File(files[i]);
@@ -453,6 +452,8 @@ class AppLogger extends Thread {
                     callback.callback("success");
                 }
             } finally {
+                //刪除过期日志后，压缩文件
+                ZipLogSupport.zipLogFiles();
                 state = 2;
             }
         }
