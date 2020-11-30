@@ -207,6 +207,10 @@ public class Log {
         LogServiceHelper.flush();
     }
 
+    public static boolean isReady() {
+        return LogServiceHelper.isReady();
+    }
+
     public static void deleteAll(final DeleteLogCallback callback) {
         LogServiceHelper.deleteAll(new IDeleteLogCallback.Stub() {
             @Override

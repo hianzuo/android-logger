@@ -11,6 +11,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -128,13 +129,31 @@ public class LogServiceHelper implements ServiceConnection {
         return false;
     }
 
+    private LinkedList<String> mBeforeInitLogs = null;
 
     private boolean appendLinesInternal(List<String> lines) {
         ILogService service = this.mILogService;
         if (null != service) {
+            if (null != mBeforeInitLogs) {
+                try {
+                    service.appendLines(mBeforeInitLogs);
+                } catch (RemoteException ignored) {
+                }
+                mBeforeInitLogs = null;
+            }
             try {
                 return service.appendLines(lines);
             } catch (RemoteException ignored) {
+            }
+        } else {
+            if (null == mBeforeInitLogs) {
+                mBeforeInitLogs = new LinkedList<>();
+            }
+            mBeforeInitLogs.addAll(lines);
+            if (mBeforeInitLogs.size() > 5000) {
+                for (int i = 0; i < 2000; i++) {
+                    mBeforeInitLogs.removeFirst();
+                }
             }
         }
         return false;
@@ -211,6 +230,10 @@ public class LogServiceHelper implements ServiceConnection {
                 }
             }
         }
+    }
+
+    public static boolean isReady() {
+        return null != helper && null != helper.mILogService;
     }
 
     public static void deleteAll(final IDeleteLogCallback callback) {
