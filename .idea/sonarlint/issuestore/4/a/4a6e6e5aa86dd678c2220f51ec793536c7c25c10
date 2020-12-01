@@ -1,23 +1,0 @@
-
-nsquid:S2095E"RUse try-with-resources or close this "BufferedOutputStream" in a "finally" clause.(üè×™ûÿÿÿÿ
-Gsquid:S1148’"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8Ã¯©åß-
-]
-squid:S899C"BDo something with the "boolean" value returned by "createNewFile".(Ğ’Íùÿÿÿÿ
-Fsquid:S2093^"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-Fsquid:S20930"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-Gsquid:S2093ã"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-asquid:S4042"IUse "java.nio.Files#delete" here for better messages on error conditions.( ›È­
-csquid:S00112$"FDefine and throw a dedicated exception instead of using a generic one.(ÃÖùüÿÿÿÿ
-jsquid:S2095D"NUse try-with-resources or close this "FileOutputStream" in a "finally" clause.(îÂÆÓÿÿÿÿÿ
-Vsquid:UselessImportCheck"+Remove this unused import 'java.io.Reader'.(µû¨é8Úñ²åß-
-csquid:S00112"FDefine and throw a dedicated exception instead of using a generic one.(àû§»ÿÿÿÿÿ
-@squid:S1148Â"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-[squid:UselessImportCheck"+Remove this unused import 'java.io.Writer'.(Î”øÿÿÿÿ8”Ğ³åß-
-psquid:ModifiersOrderCheckÉ"EReorder the modifiers to comply with the Java Language Specification.(ßüşİûÿÿÿÿ
-Gsquid:S2093ÿ"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-Gsquid:S2093¾"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-Nsquid:S2093š"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ8ß’Çåß-
-Gsquid:S2093™"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-dsquid:S00112ƒ"FDefine and throw a dedicated exception instead of using a generic one.(Ö˜ûïúÿÿÿÿ
-Gsquid:S2093õ"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-hsquid:CommentedOutCodeLineª"<This block of commented-out lines of code should be removed.(È®€Œûÿÿÿÿ

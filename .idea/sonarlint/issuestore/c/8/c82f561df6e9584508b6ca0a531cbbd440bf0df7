@@ -1,7 +1,0 @@
-
-Rsquid:S1066"/Merge this if statement with the enclosing one.(€ŸŞ¥úÿÿÿÿ8ş”¾›İ-
-]squid:S1118":Add a private constructor to hide the implicit public one.(•¨­šùÿÿÿÿ8ãÌ±›İ-
-psquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ôˆ÷À8ã×Êâß-
-]
-squid:S899%";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ8ÍŒÜæß-
-lsquid:S4042%"IUse "java.nio.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ8ÍŒÜæß-
